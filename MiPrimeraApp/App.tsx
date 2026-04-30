@@ -18,6 +18,14 @@ export default function App() {
         onPress={() => {
           console.log("Press desde boton secundario");
         }}
+        variant="secundary"
+      />
+      <CustomButton
+        title={"Tertiary Button"}
+        onPress={() => {
+          console.log("Press desde boton terciario");
+        }}
+        variant="tertiary"
       />
     </View>
   );
