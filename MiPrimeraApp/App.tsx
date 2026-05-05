@@ -1,12 +1,21 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { CustomButton } from "./src/components/CustomButton";
+import CustomInput from "./src/components/CustomInput";
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Hello Jeremy</Text>
       <StatusBar style="auto" />
+      <CustomInput
+        type={"number"}
+        placeholder={""}
+        value={""}
+        onChange={function (text: string): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
       <CustomButton
         title={"App"}
         onPress={() => {
