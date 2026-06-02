@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomInput from "../components/CustomInput";
-import { CustomButton } from "../components/CustomButton";
+import CustomButton from "../components/CustomButton";
 
 export default function RegisterScreen() {
   //definicion de una variable de estado en ReactN
@@ -12,8 +12,6 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-
       <CustomInput
         placeholder={"Ingresa tu nombre"}
         value={name}
@@ -48,7 +46,7 @@ export default function RegisterScreen() {
         onPress={() => {
           console.log("Press desde boton Secundario");
         }}
-        variant="secundary"
+        variant="secondary"
       />
       <CustomButton
         title={"Tertiary Button"}

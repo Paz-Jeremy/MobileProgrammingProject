@@ -1,49 +1,56 @@
-import { Touchable, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
+
+import { ThemeColors } from "../utils/types/ThemeColors";
+import { useTheme } from "../context/ThemeContext";
 
 type CustomButtonProps = {
   title: string;
   onPress: () => void;
-
-  // Tipo: Union de literales
-  variant?: "primary" | "secundary" | "tertiary";
-
-  // Tipo: Literal
-  // variant "primary"
+  //tipo: union de literales
+  variant?: "primary" | "secondary" | "tertiary";
+  //tipo: literal
+  //variant: "primary"
 };
 
-export function CustomButton({
+export default function CustomButton({
   title,
   onPress,
   variant = "primary",
 }: CustomButtonProps) {
-  const styles = getStyles(variant);
+  const { colors } = useTheme();
+  const styles = getStyles(variant, colors);
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Text style={styles.buttonText}> {title} </Text>
     </TouchableOpacity>
   );
 }
 
-const getStyles = (variant: "primary" | "secundary" | "tertiary") =>
+const getStyles = (
+  variant: "primary" | "secondary" | "tertiary",
+  colors: ThemeColors,
+) =>
   StyleSheet.create({
     button: {
-      borderColor: variant === "tertiary" ? "transparent" : "#80d373",
       borderRadius: 6,
-      borderWidth: 2,
-      backgroundColor: variant === "primary" ? "#303030" : "transparent",
+      //operador ternario
+      backgroundColor:
+        variant === "primary"
+          ? colors.buttonPrimaryBg
+          : variant === "secondary"
+            ? colors.buttonSecondaryBg
+            : colors.buttonTertiaryBg,
       padding: 12,
       width: 150,
-      marginTop: 4,
     },
-
     buttonText: {
       color:
         variant === "primary"
-          ? "#fff"
-          : variant === "secundary"
-            ? "#80d373"
-            : "#303030",
+          ? colors.buttonPrimaryText
+          : variant === "secondary"
+            ? colors.buttonSecondaryText
+            : colors.buttonTertiaryText,
       textAlign: "center",
-      textDecorationLine: variant === "tertiary" ? "underline" : "none",
     },
   });
