@@ -1,10 +1,9 @@
-import { View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import ScreenWrapper from "../components/ScreenWrapper";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { i18n } from "../context/LanguageContext";
-import ScreenWrapper from "../components/ScreenWrapper";
 
 export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState("mjsalinas@unitec.edu");
@@ -28,14 +27,15 @@ export default function LoginScreen({ navigation }: any) {
   return (
     <ScreenWrapper>
       <CustomInput
-        placeholder={"Ingresa tu correo"}
+        type="email"
+        placeholder="Ingresa tu correo"
         value={email}
         onChange={setEmail}
       />
 
       <CustomInput
-        type={"password"}
-        placeholder={"Ingresa tu contraseña"}
+        type="password"
+        placeholder="Ingresa tu contraseña"
         value={password}
         onChange={setPassword}
       />

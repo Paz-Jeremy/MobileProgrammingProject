@@ -7,16 +7,19 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import SectionTitle from "../components/SectionTitle";
 import StarRating from "../components/StarRating";
 import TagChip from "../components/TagChip";
-import { useSkincare } from "../context/SkincareContext";
 import { useTheme } from "../context/ThemeContext";
 import { RootStackParamList } from "../navigation/StackNavigator";
 import { CATEGORY_LABELS, UsageTimeUnit } from "../utils/types/Skincare";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addReview, deleteProduct } from "../store/slices/skincareSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ProductDetail">;
 
 export default function ProductDetailScreen({ route, navigation }: Props) {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.skincare.products);
+
   const { productId } = route.params;
-  const { products, addReview, deleteProduct } = useSkincare();
   const { colors } = useTheme();
   const product = products.find((p) => p.id === productId);
 
@@ -46,17 +49,21 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
 
   const handleSaveReview = () => {
     if (rating === 0 || !usageDuration.trim()) return;
-    addReview(productId, {
-      rating,
-      comment: comment.trim(),
-      usageDuration: parseInt(usageDuration, 10),
-      usageUnit,
-    });
+    const payload = {
+      productId,
+      review: {
+        rating,
+        comment: comment.trim(),
+        usageDuration: parseInt(usageDuration, 10),
+        usageUnit,
+      },
+    };
+    dispatch(addReview(payload));
     navigation.goBack();
   };
 
   const handleDelete = () => {
-    deleteProduct(productId);
+    dispatch(deleteProduct(productId));
     navigation.goBack();
   };
 

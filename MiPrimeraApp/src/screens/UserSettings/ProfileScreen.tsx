@@ -6,34 +6,36 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import SectionTitle from "../../components/SectionTitle";
 import TagChip from "../../components/TagChip";
 import { useAuth } from "../../context/AuthContext";
-import { useSkincare } from "../../context/SkincareContext";
 import { useTheme } from "../../context/ThemeContext";
 import {
   SkinType,
   SKIN_TYPES,
   SKIN_TYPE_LABELS,
 } from "../../utils/types/Skincare";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  addMedicalCondition,
+  addTreatment,
+  removeMedicalCondition,
+  removeTreatment,
+  updateProfile,
+} from "../../store/slices/userProfileSlice";
 
 export default function ProfileScreen() {
   const { user } = useAuth();
-  const {
-    profile,
-    updateProfile,
-    addMedicalCondition,
-    removeMedicalCondition,
-    addTreatment,
-    removeTreatment,
-  } = useSkincare();
+  const dispatch = useAppDispatch();
+  const userProfile = useAppSelector((state) => state.userProfile);
+
   const { colors } = useTheme();
 
-  const [name, setName] = useState(profile.name);
-  const [age, setAge] = useState(profile.age);
-  const [skinType, setSkinType] = useState<SkinType>(profile.skinType);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [skinType, setSkinType] = useState<SkinType>("normal");
   const [newCondition, setNewCondition] = useState("");
   const [newTreatment, setNewTreatment] = useState("");
 
   const handleSave = () => {
-    updateProfile({ name, age, skinType });
+    dispatch(updateProfile({ name, age, skinType }));
   };
 
   const handleAddCondition = () => {
@@ -63,7 +65,7 @@ export default function ProfileScreen() {
       >
         <View style={[styles.avatar, { backgroundColor: colors.secondary }]}>
           <Text style={styles.avatarText}>
-            {(profile.name || user?.email || "?").charAt(0).toUpperCase()}
+            {(userProfile.name || user?.email || "?").charAt(0).toUpperCase()}
           </Text>
         </View>
         <Text style={[styles.email, { color: colors.buttonTertiaryText }]}>
@@ -96,7 +98,7 @@ export default function ProfileScreen() {
         subtitle="Agrega tags con tus condiciones de piel o salud"
       />
       <View style={styles.tagRow}>
-        {profile.medicalConditions.map((condition) => (
+        {userProfile.medicalConditions.map((condition) => (
           <TagChip
             key={condition}
             label={condition}
@@ -125,7 +127,7 @@ export default function ProfileScreen() {
         subtitle="Registra tratamientos que estés recibiendo"
       />
       <View style={styles.tagRow}>
-        {profile.dermatologicalTreatments.map((treatment) => (
+        {userProfile.dermatologicalTreatments.map((treatment) => (
           <TagChip
             key={treatment}
             label={treatment}

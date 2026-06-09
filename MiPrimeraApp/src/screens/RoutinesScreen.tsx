@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ScreenWrapper from "../components/ScreenWrapper";
 import SectionTitle from "../components/SectionTitle";
-import { useSkincare } from "../context/SkincareContext";
 import { useTheme } from "../context/ThemeContext";
 import { CATEGORY_LABELS } from "../utils/types/Skincare";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addToRoutine, removeFromRoutine } from "../store/slices/skincareSlice";
 
 type RoutineSectionProps = {
   title: string;
@@ -19,7 +20,9 @@ function RoutineSection({
   productIds,
   type,
 }: RoutineSectionProps) {
-  const { products, addToRoutine, removeFromRoutine } = useSkincare();
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.skincare.products);
+
   const { colors } = useTheme();
 
   const routineProducts = productIds
@@ -65,7 +68,9 @@ function RoutineSection({
               </Text>
             </View>
             <TouchableOpacity
-              onPress={() => removeFromRoutine(type, product!.id)}
+              onPress={() =>
+                dispatch(removeFromRoutine({ type, productId: product!.id }))
+              }
             >
               <Ionicons
                 name="close-circle"
@@ -86,7 +91,9 @@ function RoutineSection({
             <TouchableOpacity
               key={product.id}
               style={[styles.addItem, { borderColor: colors.secondary }]}
-              onPress={() => addToRoutine(type, product.id)}
+              onPress={() =>
+                dispatch(addToRoutine({ type, productId: product!.id }))
+              }
             >
               <Ionicons
                 name="add-circle-outline"
@@ -110,7 +117,8 @@ function RoutineSection({
 }
 
 export default function RoutinesScreen() {
-  const { routine, products } = useSkincare();
+  const products = useAppSelector((state) => state.skincare.products);
+  const routine = useAppSelector((state) => state.skincare.routine);
   const { colors } = useTheme();
 
   return (
